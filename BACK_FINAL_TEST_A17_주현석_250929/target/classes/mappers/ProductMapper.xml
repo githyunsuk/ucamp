@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ucamp.mapper.ProductMapper">
+	
+	<!-- 상품 전체 조회 -->
+	<select id="selectAllProduct" resultType="Product">
+		SELECT * FROM PRODUCT
+	</select>
+	
+	<!-- 상품 일부 조회 -->
+	<select id="selectProductByOption" parameterType="ProductOption" resultType="Product">
+		SELECT * FROM PRODUCT
+		<choose>
+			<when test="option == 'id'">
+				WHERE NAME LIKE '%${search}%'
+			</when>
+			<when test="option == 'priceup'">
+				WHERE PRICE >= ${search}
+			</when>
+			<when test="option == 'pricedown'">
+				WHERE PRICE &lt;= ${search}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 상품 하나 조회 -->
+	<select id="selectProductById" parameterType="Long" resultType="Product">
+		SELECT * FROM PRODUCT
+		WHERE PRODUCT_ID = #{productId}
+	</select>
+</mapper>

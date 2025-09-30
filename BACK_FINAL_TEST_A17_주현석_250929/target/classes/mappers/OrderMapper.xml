@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ucamp.mapper.OrderMapper">
+	
+	<!-- 주문 입력-->
+	<insert id="insertOrder" parameterType="Order">
+		INSERT INTO ORDERS(order_id, member_id, product_id, order_date)
+		VALUES(seq_orders.nextval, #{memberId}, #{productId}, sysdate)
+	</insert>
+	
+	<!-- 특정 유저의 모든 주문 조회 -->
+	<select id="selectAllOrderByMember" parameterType="Long" resultType="Order">
+		SELECT O.ORDER_ID, O.MEMBER_ID, O.PRODUCT_ID, O.ORDER_DATE, O.STATUS,
+		P.NAME, P.PRICE
+		FROM ORDERS O
+		JOIN PRODUCT P ON P.PRODUCT_ID = O.PRODUCT_ID
+		WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 주문번호로 주문 취소 -->
+	<update id="updateOrderCanceled" parameterType="Long">
+		UPDATE ORDERS
+		SET STATUS = 'CANCELED'
+		WHERE ORDER_ID = #{orderId}
+	</update>
+</mapper>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>랜덤 문자 게임</title>
+    <style>     
+    </style>
+  </head>
+  <body>
+    <h1>프론트엔드 데일미션 DAY2(랜덤 문자 맞추기 게임)</h1>
+    <hr />
+    <h3>미션 요구 사항</h3>
+    <p>시작 버튼을 클릭하면 문자열 배열에서 임의의 문자열을 선택하여 화면에 '*'로 마스킹하여 출력한다.</p>
+    <p>문자를 한자씩 입력하여 마스킹을 해제한다.</p>
+    <p>문자를 맞추는 동안 시도한 회수를 메시지로 출력한다.</p>
+    <p>모든 문자가 확인되면 축하메시지를 출력한다.</p>
+    <p>스타일 적용은 자유롭게 처리한다.</p>
+
+    <p>예시) 'JavaScript' -> **********</p>
+    <p>예시) 'cascading' -> *********</p>
+    <hr>
+    <h2>문제: <span id="answer"></span></h2>
+    <h2>답안: <span id="solved"></span></h2>
+    <h2>메시지: <span id="message"></span></h2>
+    <input type="text" id="guess" maxlength="1">
+    <button id="check">확인</button><button id="start">시작</button>
+
+    <script>
+        let words = ['JavaScript', 'oracle', 'spring', 'react', 'ucamp'];
+
+        let answer = document.getElementById('answer');
+        let solved = document.getElementById('solved');
+        let message = document.getElementById('message');
+        let word; //정답 단어 변수
+        let count = 0; //시도횟수 카운트
+
+        //게임 시작 함수
+        function startGame(){
+            let random = Math.floor(Math.random() * words.length);
+            word = words[random];
+
+            answer.innerText = '*'.repeat(word.length);
+            solved.innerText = '*'.repeat(word.length);
+        }
+
+        //정답 체크 함수
+        function checkGuess(){
+             let guessBtn = document.getElementById('guess');
+            let guess = guessBtn.value;
+
+            if(guess === '') { //입력된 문자가 없으면 return
+                alert('문자를 입력해주세요!');
+                return;
+            }
+            message.innerText = `시도 횟수 : ${++count}번`; //시도 횟수 카운트
+            guessBtn.value = ''; //입력 후엔 입력창 비우기
+            if(!word.toLowerCase().includes(guess)) return; //일치하는 값이 없으면 return
+
+            let newSolve = '';
+
+            for(let i=0; i<word.length; i++){
+                if(word[i].toLowerCase() === guess){
+                    newSolve += word[i];
+                } else{
+                    newSolve += solved.innerText[i];
+                }
+            }
+
+            solved.innerText = newSolve;
+
+            if(solved.innerText === word){
+                message.innerText = `축하합니다! ${count}번만에 성공!`;
+            }
+        }
+
+        //이벤트 등록
+        document.getElementById('start').addEventListener('click', startGame);
+        document.getElementById('check').addEventListener('click', checkGuess);
+
+    </script>
+  </body>
+</html>

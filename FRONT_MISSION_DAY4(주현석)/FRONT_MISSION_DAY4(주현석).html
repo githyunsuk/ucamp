@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>도서 정보 관리</h1>
+    도서명 : <input type="text" id="name"><br>
+    가격 : <input type="text" id="price"><br>
+    <button id="add">도서추가</button>
+    <p>도서 추가 버튼을 클릭하면 입력한 도서 정보가 추가됩니다.</p>
+    <p>도서당 추가되는 정보에는 체크박스와 삭제 버튼이 함께 추가됩니다.</p>
+    <p>삭제 버튼을 클릭하면 데이터가 삭제되어 화면에서 지워집니다.</p>
+    <p>체크 박스를 클릭하여 체크한 뒤 하단의 선택 삭제를 클릭하면, 체크한 모든 도서정보가 삭제됨.</p>
+    <div id="bookList">
+        <table border="1" id="table">
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>가격</th>
+                <th>체크</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+        </table>
+    </div><br>
+    <button id="selectedDelete">선택 삭제</button>
+
+    <script>
+
+        const name = document.querySelector('#name');
+        const price = document.querySelector('#price');
+        const tbody = document.querySelector('#tbody');
+
+        //추가 버튼 클릭시
+        document.querySelector('#add').addEventListener('click', function(){
+            const tr = document.createElement('tr');
+            
+            const td1 = document.createElement('td');
+            td1.innerHTML = name.value;
+
+            const td2 = document.createElement('td');
+            td2.innerHTML = price.value;
+
+            const td3 = document.createElement('td');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            td3.appendChild(checkbox);
+
+            const td4 = document.createElement('td');
+            const button = document.createElement('button');
+            button.addEventListener('click', function(){
+                deleteRow(this);
+            })
+            button.innerHTML = '삭제';
+            td4.appendChild(button);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            
+            tbody.appendChild(tr);
+
+            name.value = '';
+            price.value = '';
+        });
+
+        //선택 삭제 버튼 클릭시
+        document.querySelector('#selectedDelete').addEventListener('click', function(){
+
+            if(!confirm('정말 삭제하시겠습니까?')) return;
+
+            const rows = document.querySelectorAll('#tbody tr');
+            rows.forEach(row => {
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) { 
+                    row.remove();
+                }
+            });
+        });
+
+        //삭제 함수
+        function deleteRow(button){
+            const row = button.closest('tr')
+            if(confirm('정말 삭제하시겠습니까?')){
+                row.remove();
+            }
+        }
+    </script>
+</body>
+</html>
